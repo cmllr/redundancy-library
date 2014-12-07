@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\FileSystemItem.cs" />
-    <Compile Include="Classes\Role.cs" />
-    <Compile Include="Classes\User.cs" />
+    <Compile Include="Models\FileSystemItem.cs" />
+    <Compile Include="MimeTypes.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\UploadFile.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="libRedundancy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

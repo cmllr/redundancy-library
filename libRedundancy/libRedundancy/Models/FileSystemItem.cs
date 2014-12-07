@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace libRedundancy.Classes
+namespace libRedundancy.Models
 {
     public class FileSystemItem
     {
@@ -18,7 +18,7 @@ namespace libRedundancy.Classes
         public string MimeType { get; set; }
         public string FilePath { get; set; }
         public string Thumbnail { get; set; }
-        public int SizeInBytes { get; set; }
+        public dynamic SizeInBytes { get; set; }
         public string SizeWithUnit { get; set; }
         public string UsedUserAgent { get; set; }
     }
