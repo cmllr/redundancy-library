@@ -1,0 +1,4 @@
+language: csharp
+script:
+ - nuget restore libRedundancy/libRedundancy.sln
+ - xbuild libRedundancy/libRedundancy.sln
