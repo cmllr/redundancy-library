@@ -7,9 +7,11 @@ Core client library to communicate with Redundancy servers.
 
 Requirements
 ============
-* JSON.NET http://james.newtonking.com/json
-* .NET runtime with support for dynamic keyword
-* Redundancy server version 1.9.15 and later
+* [JSON.NET]
+* .NET Framework 4+
+* Redundancy server version 1.9.15+
+
+[JSON.NET]:http://james.newtonking.com/json
 
 Further documentation
 =====================
@@ -19,7 +21,7 @@ See http://redundancy.pfweb.eu/doc/1.9.15/index.html for more details
 Sample
 ======
 
-You can find the Console application "Test" in the project solution.
+You can find the console application **Test** in the project folder.
 
 ```C 
 string userName = "username";
@@ -39,10 +41,13 @@ List<FileSystemItem> entries =  lib.Request<List<FileSystemItem>>("Kernel.FileSy
 
 //Create a new folder
 bool newDir = lib.Request<bool>("Kernel.FileSystemKernel", "CreateDirectory", new string[] { "FileUploads", "-1", token });
+
 //Rename it (get the ID, then rename)
 FileSystemItem newFolder = lib.Request<FileSystemItem>("Kernel.FileSystemKernel", "GetEntryByAbsolutePath", new string[] { "/FileUploads/", token });
+
 //Do the renaming itself
 bool rename = lib.Request<bool>("Kernel.FileSystemKernel", "RenameEntry", new string[] { newFolder.ID.ToString(), "renamedFolder", token });
+
 //Get the properties of the now renamed folder
 FileSystemItem renamedFolder = lib.Request<FileSystemItem>("Kernel.FileSystemKernel", "GetEntryByAbsolutePath", new string[] { "/renamedFolder/", token });
 
@@ -53,4 +58,4 @@ bool upload = lib.UploadFile(renamedFolder.ID, token, "C:\\Users\\rdcy\\sample.d
 License
 =======
 
-See LICENSE for more details
+See [LICENSE](LICENSE) for more details
