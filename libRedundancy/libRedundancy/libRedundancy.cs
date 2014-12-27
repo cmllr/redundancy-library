@@ -1,5 +1,6 @@
 ﻿using libRedundancy.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -65,10 +66,36 @@ namespace libRedundancy
         /// <returns>The object</returns>
         private T GetObject<T>(string json)
         {
-            int dummy;
-            if (int.TryParse(json, out dummy))
+            try
+            {
+                JContainer.Parse(json);
+                int dummy;
+                if (int.TryParse(json, out dummy))
+                   return default(T);
+                return JsonConvert.DeserializeObject<T>(json);     
+            }catch{
                 return default(T);
-            return JsonConvert.DeserializeObject<T>(json);
+            }                  
+        }
+        /// <summary>
+        /// Download the given file to a target path
+        /// </summary>
+        /// <param name="hash">The hash of the wanted file</param>
+        /// <param name="token">The session token</param>
+        /// <param name="target">The target path</param>
+        public void Download(string hash,string token,string target)
+        {
+            using (var client = new WebClient())
+            {
+                var values = new NameValueCollection
+                {
+                    { "module", "Kernel.FileSystemKernel" },
+                    { "method", "GetContentOfFile" },
+                    { "args", JsonConvert.SerializeObject(new string[] { hash, token }) },
+                };
+                byte[] result = client.UploadValues(this.Target, values);
+                File.WriteAllBytes(target, result);
+            }
         }
         /// <summary>
         /// Request the objects
