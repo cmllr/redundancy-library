@@ -1,4 +1,23 @@
-﻿using libRedundancy.Models;
+﻿/*
+    * This file contains the user kernel, which contains all needed functions for managing the users of the program.
+    * @license
+    *
+    * This program is free software; you can redistribute it and/or
+    * modify it under the terms of the GNU General Public License as
+    * published by the Free Software Foundation; either version 3 of
+    * the License, or (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful, but
+    * WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    * General Public License for more details at
+    * http://www.gnu.org/copyleft/gpl.html
+    *
+    * @author lw1994 <luca@welkr.de>
+    *
+    * @todo  
+*/ 
+using RedundancyAccessLibrary.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -14,35 +33,39 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace libRedundancy
+namespace RedundancyAccessLibrary
 {
     public enum Error
     {
         NoResult,
         RequestError,
     }
+
     /// <summary>
     /// Redundancy C# client library
     /// Requires JSON.NET 
     /// </summary>
-    public class libRedundancy
+    public class RedundancyAccessLibrary
     {
         /// <summary>
         /// The target path to api.inc.php
         /// </summary>
         public Uri Target { get; set; }
+
         /// <summary>
         /// The last occured error code
         /// </summary>
         public int LastErrorCode { get; set; }
+
         /// <summary>
         /// Default Constructor
         /// </summary>
         /// <param name="target">The target api path</param>
-        public libRedundancy(Uri target)
+        public RedundancyAccessLibrary(Uri target)
         {
             this.Target = target;
         }
+
         /// <summary>
         /// Send POST Request to the server
         /// </summary>
@@ -58,6 +81,7 @@ namespace libRedundancy
                 return responseString;
             }
         }
+
         /// <summary>
         /// Get the object from the JSON data
         /// </summary>
@@ -77,6 +101,7 @@ namespace libRedundancy
                 return default(T);
             }                  
         }
+
         /// <summary>
         /// Download the given file to a target path
         /// </summary>
@@ -97,6 +122,7 @@ namespace libRedundancy
                 File.WriteAllBytes(target, result);
             }
         }
+
         /// <summary>
         /// Request the objects
         /// </summary>
@@ -110,6 +136,7 @@ namespace libRedundancy
             string response = this.DoRequest(module, method, args);           
             return this.GetObject<T>(response);
         }
+
         /// <summary>
         /// Do the request itself
         /// </summary>
@@ -138,6 +165,7 @@ namespace libRedundancy
                 return response;
             }
         }
+
         /// <summary>
         /// Upload the file
         /// </summary>
@@ -169,6 +197,7 @@ namespace libRedundancy
                     return false;
             }
         }
+
         /// <summary>
         ///  Upload a file. Temporary solution by http://dev.bratched.com/en/uploading-multiple-files-with-c/
         /// </summary>
