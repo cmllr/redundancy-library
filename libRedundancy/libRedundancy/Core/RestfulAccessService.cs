@@ -18,7 +18,7 @@
     * @todo - 2015-02-22: Replace method-argument type from string to enum
 */
 
-using RedundancyAccessLibrary.Domain;
+using RedundancyLibrary.Domain;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,7 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace RedundancyAccessLibrary.Core
+namespace RedundancyLibrary.Core
 {
     public abstract class RestfulAccessService<T>
     {

@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RedundancyAccessLibrary.Domain.Attributes
+namespace RedundancyLibrary.Domain.Attributes
 {
     public sealed class ApiModuleTypeAttribute : Attribute
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{B5B7420D-CA3D-4F2A-85FF-EA2C450B0E83}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RedundancyAccessLibrary</RootNamespace>
-    <AssemblyName>RedundancyAccessLibrary</AssemblyName>
+    <RootNamespace>RedundancyLibrary</RootNamespace>
+    <AssemblyName>RedundancyLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

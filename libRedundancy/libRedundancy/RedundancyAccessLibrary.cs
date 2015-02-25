@@ -17,7 +17,7 @@
     *
     * @todo  
 */ 
-using RedundancyAccessLibrary.Models;
+using RedundancyLibrary.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -33,7 +33,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace RedundancyAccessLibrary
+namespace RedundancyLibrary
 {
     public enum Error
     {

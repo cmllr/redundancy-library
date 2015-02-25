@@ -20,7 +20,7 @@
 
 using System.Net;
 
-namespace RedundancyAccessLibrary.Core
+namespace RedundancyLibrary.Core
 {
     /// <summary>
     /// This class is needed, cause the original "GetResponse"-method throws an exception if HttpStatusCode != 200

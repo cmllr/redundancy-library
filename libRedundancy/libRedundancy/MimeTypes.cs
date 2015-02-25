@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RedundancyAccessLibrary
+namespace RedundancyLibrary
 {
     public static class MimeType
     {

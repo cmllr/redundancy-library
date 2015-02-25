@@ -18,9 +18,9 @@
     * @todo  
 */
 
-using RedundancyAccessLibrary.Domain.Attributes;
+using RedundancyLibrary.Domain.Attributes;
 
-namespace RedundancyAccessLibrary.Domain
+namespace RedundancyLibrary.Domain
 {
     public enum ApiModule
     {

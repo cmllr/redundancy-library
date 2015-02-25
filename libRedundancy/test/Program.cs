@@ -1,8 +1,8 @@
-﻿using RedundancyAccessLibrary.Models;
+﻿using RedundancyLibrary.Models;
 using System;
 using System.Collections.Generic;
 
-namespace RedundancyAccessLibrary.Test
+namespace RedundancyLibrary.Test
 {
     class Program
     {

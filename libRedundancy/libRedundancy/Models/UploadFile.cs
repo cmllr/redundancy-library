@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedundancyAccessLibrary.Models
+namespace RedundancyLibrary.Models
 {
     public class UploadFile
     {

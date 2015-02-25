@@ -7,8 +7,8 @@
     <ProjectGuid>{E53762C3-895F-4D4C-8C99-F9FD8ABC9E38}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RedundancyAccessLibrary.Test</RootNamespace>
-    <AssemblyName>RedundancyAccessLibrary.Test</AssemblyName>
+    <RootNamespace>RedundancyLibrary.Test</RootNamespace>
+    <AssemblyName>RedundancyLibrary.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -53,9 +53,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\libRedundancy\RedundancyAccessLibrary.csproj">
+    <ProjectReference Include="..\libRedundancy\RedundancyLibrary.csproj">
       <Project>{b5b7420d-ca3d-4f2a-85ff-ea2c450b0e83}</Project>
-      <Name>RedundancyAccessLibrary</Name>
+      <Name>RedundancyLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

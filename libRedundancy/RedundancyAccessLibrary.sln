@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedundancyAccessLibrary", "libRedundancy\RedundancyAccessLibrary.csproj", "{B5B7420D-CA3D-4F2A-85FF-EA2C450B0E83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedundancyLibrary", "libRedundancy\RedundancyLibrary.csproj", "{B5B7420D-CA3D-4F2A-85FF-EA2C450B0E83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedundancyAccessLibrary.Test", "test\RedundancyAccessLibrary.Test.csproj", "{E53762C3-895F-4D4C-8C99-F9FD8ABC9E38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedundancyLibrary.Test", "test\RedundancyLibrary.Test.csproj", "{E53762C3-895F-4D4C-8C99-F9FD8ABC9E38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
