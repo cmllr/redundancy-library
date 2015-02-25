@@ -24,7 +24,7 @@ using System;
 
 namespace RedundancyLibrary.Core
 {
-    internal static class Authentification
+    public static class Authentification
     {
         public static bool Authorize(string username, string password, string apiUrl)
         {
@@ -39,7 +39,7 @@ namespace RedundancyLibrary.Core
 
         #region fields
 
-        public static Token Token { get; private set; }
+        internal static Token Token { get; private set; }
 
         #endregion
     }

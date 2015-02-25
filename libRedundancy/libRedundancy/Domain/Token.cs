@@ -33,7 +33,7 @@ namespace RedundancyLibrary.Domain
 
             _tokenString = tokenString;
             _creationDate = DateTime.Now;
-            _expiersIn = (staysAlive) ? -1 : TimeSpan.FromMinutes(20).Seconds;
+            _expiersIn = (staysAlive) ? -1 : TimeSpan.FromMinutes(20).TotalSeconds;
         }
 
         #endregion
@@ -50,7 +50,7 @@ namespace RedundancyLibrary.Domain
 
         #region fields
 
-        private int _expiersIn = TimeSpan.FromMinutes(20).Seconds; // in seconds
+        private double _expiersIn; // in seconds
 
         #endregion
 

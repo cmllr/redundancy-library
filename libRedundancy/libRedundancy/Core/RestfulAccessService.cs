@@ -19,10 +19,12 @@
 */
 
 using RedundancyLibrary.Domain;
+using RedundancyLibrary.Domain.Attributes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -88,7 +90,7 @@ namespace RedundancyLibrary.Core
         {
             var data = new Dictionary<string, string>
             {
-                {"module", module.ToString()},
+                {"module", module.GetModuleType()},
                 {"method", method},
                 {"args", GetJsonStringFromArgument(arguments)}
             };
@@ -97,7 +99,7 @@ namespace RedundancyLibrary.Core
             using (var requestStream = new StreamWriter(WebRequest.GetRequestStream()))
                 requestStream.Write(dataString);
 
-            using (var response = WebRequest.TryGetResponseStream())
+            using (var response = WebRequest.TryGetResponse())
             {
                 using (var ms = new MemoryStream())
                 {
@@ -162,7 +164,10 @@ namespace RedundancyLibrary.Core
             if (typeof(Stream).IsAssignableFrom(typeof(T)))
                 return (T)((object)inputStream); // cast first to object, because you can't cast inputStream directly to (T)
 
-            var serializer = new DataContractJsonSerializer(typeof(T));
+            var serializer = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings
+            {
+                DateTimeFormat = new DateTimeFormat("dd. MMM yyyy - HH:mm")
+            });
             return (T)serializer.ReadObject(inputStream);
         }
 

@@ -27,7 +27,7 @@ namespace RedundancyLibrary.Core
     /// </summary>
     internal static class HttpWebRequestExtension
     {
-        public static HttpWebResponse TryGetResponseStream(this HttpWebRequest request)
+        public static HttpWebResponse TryGetResponse(this HttpWebRequest request)
         {
             try
             {

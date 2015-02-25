@@ -1,4 +1,8 @@
 ﻿
+using RedundancyLibrary.Core;
+using RedundancyLibrary.Kernels;
+using System;
+
 namespace RedundancyLibrary.Test
 {
     class Program
@@ -8,6 +12,13 @@ namespace RedundancyLibrary.Test
             string userName = "ApiTest";
             string password = "apitest";
             string target = "http://localhost/Includes/api.inc.php";
+
+            var authOk = Authentification.Authorize(userName, password, target);
+
+            var fileKernel = new FileSystemKernel(target);
+            var files = fileKernel.GetDirectoryContent();
+
+            Console.ReadLine();
 
             ////Initalize the api
             //RedundancyAccessLibrary lib = new RedundancyAccessLibrary(new Uri(target));

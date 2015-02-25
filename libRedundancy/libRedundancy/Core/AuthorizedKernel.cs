@@ -47,6 +47,12 @@ namespace RedundancyLibrary.Core
                 throw new SecurityException();
         }
 
+        protected string GetTokenString()
+        {
+            CheckAuthorization();
+            return Authentification.Token.TokenString;
+        }
+
         #endregion
 
         #region override: Kernel
