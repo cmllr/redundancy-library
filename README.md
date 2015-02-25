@@ -1,6 +1,6 @@
 redundancy-library
 =============
-[![Build Status](https://travis-ci.org/Redundancycloud/redundancy-library.svg?branch=master)](https://travis-ci.org/squarerootfury/redundancy-library)
+[![Build Status](https://travis-ci.org/Redundancycloud/redundancy-library.svg?branch=master)](https://travis-ci.org/sRedundancycloud/redundancy-library)
 ![Image of R2](https://raw.githubusercontent.com/squarerootfury/redundancy/Lenticularis/nys/Views/img/logoWithText.png)
 
 Core client library to communicate with Redundancy servers.
