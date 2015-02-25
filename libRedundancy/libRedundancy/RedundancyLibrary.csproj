@@ -45,10 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Authentification.cs" />
+    <Compile Include="Core\AuthorizedKernel.cs" />
     <Compile Include="Core\Extensions\HttpWebRequestExtension.cs" />
+    <Compile Include="Core\Kernel.cs" />
     <Compile Include="Core\RestfulAccessService.cs" />
     <Compile Include="Domain\ApiModule.cs" />
     <Compile Include="Domain\Attributes\ApiModuleTypeAttribute.cs" />
+    <Compile Include="Domain\Token.cs" />
+    <Compile Include="Kernels\UserKernel.cs" />
     <Compile Include="Models\FileSystemItem.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="Models\Role.cs" />

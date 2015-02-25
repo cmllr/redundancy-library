@@ -28,7 +28,7 @@ using System.Text;
 
 namespace RedundancyLibrary.Core
 {
-    public abstract class RestfulAccessService<T>
+    public class RestfulAccessService
     {
         #region constructors
 
@@ -84,7 +84,7 @@ namespace RedundancyLibrary.Core
 
         #region methods
 
-        public T SendRequest(ApiModule module, string method, IEnumerable<string> arguments)
+        public T SendRequest<T>(ApiModule module, string method, IEnumerable<string> arguments)
         {
             var data = new Dictionary<string, string>
             {
@@ -99,12 +99,16 @@ namespace RedundancyLibrary.Core
 
             using (var response = WebRequest.TryGetResponseStream())
             {
-                using (var responseStream = response.GetResponseStream())
+                using (var ms = new MemoryStream())
                 {
-                    if (response.StatusCode != HttpStatusCode.OK)
-                        HandleError(responseStream);
+                    using (var responseStream = response.GetResponseStream())
+                        responseStream.CopyTo(ms); // copy to memorystream, because a ConnectStream isn't searchable
+                    ms.Position = 0; // reset position so we can start reading from the beginning :)
 
-                    return GetResult(responseStream);
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        HandleError(ms);
+
+                    return GetResult<T>(ms);
                 }
             }
         }
@@ -153,7 +157,14 @@ namespace RedundancyLibrary.Core
 
         #region virtual methods
 
-        protected abstract T GetResult(Stream responseStream);
+        protected virtual T GetResult<T>(Stream inputStream)
+        {
+            if (typeof(Stream).IsAssignableFrom(typeof(T)))
+                return (T)((object)inputStream); // cast first to object, because you can't cast inputStream directly to (T)
+
+            var serializer = new DataContractJsonSerializer(typeof(T));
+            return (T)serializer.ReadObject(inputStream);
+        }
 
         #endregion
     }

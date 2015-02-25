@@ -25,6 +25,8 @@ namespace RedundancyLibrary.Domain
     public enum ApiModule
     {
         [ApiModuleType("Kernel.FileSystemKernel")]
-        FileSystemKernel
+        FileSystemKernel,
+        [ApiModuleType("Kernel.UserKernel")]
+        UserKernel
     }
 }
