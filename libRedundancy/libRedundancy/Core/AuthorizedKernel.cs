@@ -19,7 +19,6 @@
 
 using RedundancyLibrary.Domain;
 using System;
-using System.Collections.Generic;
 using System.Security;
 namespace RedundancyLibrary.Core
 {
@@ -57,10 +56,16 @@ namespace RedundancyLibrary.Core
 
         #region override: Kernel
 
-        protected override T SendRequest<T>(string method, IEnumerable<string> args)
+        protected override T SendRequest<T>(string method, params string[] args)
         {
             CheckAuthorization();
             return base.SendRequest<T>(method, args);
+        }
+
+        protected override void SendRequest(string method, params string[] args)
+        {
+            CheckAuthorization();
+            base.SendRequest(method, args);
         }
 
         #endregion

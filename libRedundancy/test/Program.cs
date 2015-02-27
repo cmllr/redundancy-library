@@ -16,7 +16,10 @@ namespace RedundancyLibrary.Test
             var authOk = Authentification.Authorize(userName, password, target);
 
             var fileKernel = new FileSystemKernel(target);
-            var files = fileKernel.GetDirectoryContent();
+            var filesBefore = fileKernel.GetDirectoryContent();
+            fileKernel.CreateDirectory("Test", -1);
+            var filesAfter = fileKernel.GetDirectoryContent();
+
 
             Console.ReadLine();
 

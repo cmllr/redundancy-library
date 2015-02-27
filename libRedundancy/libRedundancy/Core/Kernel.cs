@@ -20,7 +20,6 @@
 
 using RedundancyLibrary.Domain;
 using System;
-using System.Collections.Generic;
 
 namespace RedundancyLibrary.Core
 {
@@ -58,9 +57,14 @@ namespace RedundancyLibrary.Core
 
         #region methods
 
-        protected virtual T SendRequest<T>(string method, IEnumerable<string> args)
+        protected virtual T SendRequest<T>(string method, params string[] args)
         {
             return RestfulAccessService.SendRequest<T>(_module, method, args);
+        }
+
+        protected virtual void SendRequest(string method, params string[] args)
+        {
+            RestfulAccessService.SendRequest(_module, method, args);
         }
 
         #endregion

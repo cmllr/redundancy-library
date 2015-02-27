@@ -33,6 +33,8 @@ namespace RedundancyLibrary.Kernels
         #region constants
 
         private const string METHOD_GETCONTENT = "GetContent";
+        private const string METHOD_CREATEDIRECTORY = "CreateDirectory";
+        private const string METHOD_UPLOADFILE = "UploadFile";
 
         #endregion
 
@@ -63,8 +65,25 @@ namespace RedundancyLibrary.Kernels
         /// <param name="absolutDirPath">Absolut directory path</param>
         public IEnumerable<FileSystemItem> GetDirectoryContent(string absolutDirPath)
         {
-            var args = new string[] { absolutDirPath, GetTokenString() };
-            return SendRequest<List<FileSystemItem>>(METHOD_GETCONTENT, args);
+            return SendRequest<List<FileSystemItem>>(METHOD_GETCONTENT, absolutDirPath, GetTokenString());
+        }
+
+        #endregion
+
+        #region CreateDirectory
+
+        public void CreateDirectory(string name, int rootDirectoryId)
+        {
+            SendRequest(METHOD_CREATEDIRECTORY, name, rootDirectoryId.ToString(), GetTokenString());
+        }
+
+        #endregion
+
+        #region UploadFile
+
+        public bool UploadFile(int rootDirectoryId)
+        {
+            return SendRequest<bool>(METHOD_UPLOADFILE, rootDirectoryId.ToString(), GetTokenString());
         }
 
         #endregion

@@ -40,7 +40,6 @@ namespace RedundancyLibrary.Core
                 throw new ArgumentNullException("apiUri");
             _apiUri = apiUri;
 
-            _webRequest = new Lazy<HttpWebRequest>(CreateWebRequest);
             _serializer = new Lazy<DataContractJsonSerializer>(() => { return new DataContractJsonSerializer(typeof(IEnumerable<string>)); });
         }
 
@@ -61,8 +60,16 @@ namespace RedundancyLibrary.Core
 
         #region WebRequest
 
-        private readonly Lazy<HttpWebRequest> _webRequest;
-        protected HttpWebRequest WebRequest { get { return _webRequest.Value; } }
+        private HttpWebRequest _webRequest;
+        protected HttpWebRequest WebRequest
+        {
+            get
+            {
+                if (_webRequest == null || _webRequest.HaveResponse)
+                    _webRequest = CreateWebRequest();
+                return _webRequest;
+            }
+        }
 
         private HttpWebRequest CreateWebRequest()
         {
@@ -88,6 +95,28 @@ namespace RedundancyLibrary.Core
 
         public T SendRequest<T>(ApiModule module, string method, IEnumerable<string> arguments)
         {
+            using (var responseStream = new MemoryStream())
+            {
+                var statusCode = SendRequest(module, method, arguments, responseStream);
+                if (statusCode != HttpStatusCode.OK)
+                    HandleError(responseStream);
+
+                return GetResult<T>(responseStream);
+            }
+        }
+
+        public void SendRequest(ApiModule module, string method, IEnumerable<string> arguments)
+        {
+            using (var responseStream = new MemoryStream())
+            {
+                var statusCode = SendRequest(module, method, arguments, responseStream);
+                if (statusCode != HttpStatusCode.OK)
+                    HandleError(responseStream);
+            }
+        }
+
+        private HttpStatusCode SendRequest(ApiModule module, string method, IEnumerable<string> arguments, Stream outputStream)
+        {
             var data = new Dictionary<string, string>
             {
                 {"module", module.GetModuleType()},
@@ -101,17 +130,12 @@ namespace RedundancyLibrary.Core
 
             using (var response = WebRequest.TryGetResponse())
             {
-                using (var ms = new MemoryStream())
+                using (var responseStream = response.GetResponseStream())
                 {
-                    using (var responseStream = response.GetResponseStream())
-                        responseStream.CopyTo(ms); // copy to memorystream, because a ConnectStream isn't searchable
-                    ms.Position = 0; // reset position so we can start reading from the beginning :)
-
-                    if (response.StatusCode != HttpStatusCode.OK)
-                        HandleError(ms);
-
-                    return GetResult<T>(ms);
+                    responseStream.CopyTo(outputStream);
+                    outputStream.Position = 0;
                 }
+                return response.StatusCode;
             }
         }
 
