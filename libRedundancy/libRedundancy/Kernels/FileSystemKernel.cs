@@ -35,7 +35,13 @@ namespace RedundancyLibrary.Kernels
 
         private const string METHOD_GETCONTENT = "GetContent";
         private const string METHOD_CREATEDIRECTORY = "CreateDirectory";
+        private const string METHOD_DELETEDIRECTORY = "DeleteDirectory";
+        private const string METHOD_GETFOLDERLIST = "GetFolderList";
+
         private const string METHOD_UPLOADFILE = "UploadFile";
+        private const string METHOD_DELETEFILE = "DeleteFile";
+
+        private const string METHOD_GETABSOLUTEPATHBYID = "GetAbsolutePathById";
 
         #endregion
 
@@ -49,6 +55,11 @@ namespace RedundancyLibrary.Kernels
         #endregion
 
         #region methods
+
+        public string GetAbsolutePath(int id)
+        {
+            return SendRequest<string>(METHOD_GETABSOLUTEPATHBYID, id.ToString(), GetTokenString());
+        }
 
         #region GetDirectoryContent
 
@@ -71,6 +82,8 @@ namespace RedundancyLibrary.Kernels
 
         #endregion
 
+        #region Directory
+
         #region CreateDirectory
 
         public void CreateDirectory(string name, int rootDirectoryId)
@@ -79,6 +92,26 @@ namespace RedundancyLibrary.Kernels
         }
 
         #endregion
+
+        public IEnumerable<string> GetFolderList()
+        {
+            return SendRequest<IEnumerable<string>>(METHOD_GETFOLDERLIST, GetTokenString());
+        }
+
+        public bool DeleteDirectory(int entryId)
+        {
+            var path = GetAbsolutePath(entryId);
+            return SendRequest<bool>(METHOD_DELETEDIRECTORY, path, GetTokenString());
+        }
+
+        public bool DeleteDirectory(string path)
+        {
+            return SendRequest<bool>(METHOD_DELETEDIRECTORY, path, GetTokenString());
+        }
+
+        #endregion
+
+        #region File
 
         #region UploadFile
 
@@ -89,6 +122,19 @@ namespace RedundancyLibrary.Kernels
 
             return SendFileRequest<bool>(METHOD_UPLOADFILE, file, rootDirectoryId.ToString(), GetTokenString());
         }
+
+        public bool DeleteFile(int entryId)
+        {
+            var path = GetAbsolutePath(entryId);
+            return SendRequest<bool>(METHOD_DELETEFILE, path, GetTokenString());
+        }
+
+        public bool DeleteFile(string path)
+        {
+            return SendRequest<bool>(METHOD_DELETEFILE, path, GetTokenString());
+        }
+
+        #endregion
 
         #endregion
 

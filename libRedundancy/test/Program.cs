@@ -2,7 +2,6 @@
 using RedundancyLibrary.Core;
 using RedundancyLibrary.Kernels;
 using System;
-using System.IO;
 
 namespace RedundancyLibrary.Test
 {
@@ -17,7 +16,10 @@ namespace RedundancyLibrary.Test
             var authOk = Authentification.Authorize(userName, password, target);
 
             var fileKernel = new FileSystemKernel(target);
-            var filesBefore = fileKernel.GetDirectoryContent();
+            var filesBefore = fileKernel.GetFolderList();
+
+
+            var filesAfter = fileKernel.GetDirectoryContent();
 
 
             Console.ReadLine();
