@@ -2,6 +2,7 @@
 using RedundancyLibrary.Core;
 using RedundancyLibrary.Kernels;
 using System;
+using System.IO;
 
 namespace RedundancyLibrary.Test
 {
@@ -17,8 +18,6 @@ namespace RedundancyLibrary.Test
 
             var fileKernel = new FileSystemKernel(target);
             var filesBefore = fileKernel.GetDirectoryContent();
-            fileKernel.CreateDirectory("Test", -1);
-            var filesAfter = fileKernel.GetDirectoryContent();
 
 
             Console.ReadLine();

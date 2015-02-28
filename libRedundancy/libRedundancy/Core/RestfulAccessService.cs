@@ -22,6 +22,7 @@ using RedundancyLibrary.Domain;
 using RedundancyLibrary.Domain.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
@@ -49,6 +50,7 @@ namespace RedundancyLibrary.Core
 
         private const string METHOD_POST = "POST";
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
+        private const string DATA_TEMPLATE = "Content-Disposition: form-data; name=\"{0}\"";
 
         #endregion
 
@@ -115,20 +117,39 @@ namespace RedundancyLibrary.Core
             }
         }
 
+        public T SendFileRequest<T>(ApiModule module, string method, IEnumerable<string> arguments, FileInfo inputFile)
+        {
+            using (var responseStream = new MemoryStream())
+            {
+                var statusCode = SendFileRequest(module, method, arguments, inputFile, responseStream);
+                if (statusCode != HttpStatusCode.OK)
+                    HandleError(responseStream);
+
+                return GetResult<T>(responseStream);
+            }
+        }
+
         private HttpStatusCode SendRequest(ApiModule module, string method, IEnumerable<string> arguments, Stream outputStream)
         {
+            var request = WebRequest;
             var data = new Dictionary<string, string>
             {
                 {"module", module.GetModuleType()},
                 {"method", method},
                 {"args", GetJsonStringFromArgument(arguments)}
             };
-            var dataString = GetStringForRequest(data);
 
-            using (var requestStream = new StreamWriter(WebRequest.GetRequestStream()))
-                requestStream.Write(dataString);
+            var boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x", NumberFormatInfo.InvariantInfo);
+            request.ContentType = String.Format("multipart/form-data; boundary={0}", boundary);
+            boundary = "--" + boundary;
 
-            using (var response = WebRequest.TryGetResponse())
+            using (var requestStream = request.GetRequestStream())
+            {
+                WriteRequest(data, boundary, requestStream);
+                WriteValueToStream(boundary + "--", requestStream);
+            }
+
+            using (var response = request.TryGetResponse())
             {
                 using (var responseStream = response.GetResponseStream())
                 {
@@ -138,6 +159,68 @@ namespace RedundancyLibrary.Core
                 return response.StatusCode;
             }
         }
+
+        #region SendFileRequest
+
+        private HttpStatusCode SendFileRequest(ApiModule module, string method, IEnumerable<string> arguments, FileInfo inputFile, Stream outputStream)
+        {
+            var request = WebRequest;
+            var data = new Dictionary<string, string>
+            {
+                {"module", module.GetModuleType()},
+                {"method", method},
+                {"args", GetJsonStringFromArgument(arguments)}
+            };
+
+            var boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x", NumberFormatInfo.InvariantInfo);
+            request.ContentType = String.Format("multipart/form-data; boundary={0}", boundary);
+            boundary = "--" + boundary;
+
+            using (var requestStream = request.GetRequestStream())
+            {
+                WriteRequest(data, boundary, requestStream);
+                WriteFileToStream(inputFile, boundary, requestStream);
+                WriteValueToStream(boundary + "--", requestStream);
+            }
+
+            using (var response = request.TryGetResponse())
+            {
+                using (var responseStream = response.GetResponseStream())
+                {
+                    responseStream.CopyTo(outputStream);
+                    outputStream.Position = 0;
+                }
+                return response.StatusCode;
+            }
+        }
+
+        private void WriteFileToStream(FileInfo inputFile, string boundary, Stream requestStream)
+        {
+            WriteValueToStream(boundary + Environment.NewLine, requestStream);
+            WriteValueToStream(String.Format(DATA_TEMPLATE + "; filename=\"{1}\"{2}", "file", inputFile.Name, Environment.NewLine), requestStream);
+            WriteValueToStream(String.Format("Content-Type: {0}{1}{1}", MimeType.Get(inputFile.Extension), Environment.NewLine), requestStream);
+            using (var fs = inputFile.OpenRead())
+                fs.CopyTo(requestStream);
+            WriteValueToStream(Environment.NewLine, requestStream);
+        }
+
+        private void WriteRequest(Dictionary<string, string> data, string boundary, Stream requestStream)
+        {
+            foreach (var d in data)
+            {
+                WriteValueToStream(boundary + Environment.NewLine, requestStream);
+                WriteValueToStream(String.Format(DATA_TEMPLATE + "{1}{1}", d.Key, Environment.NewLine), requestStream);
+                WriteValueToStream(d.Value + Environment.NewLine, requestStream);
+            }
+        }
+
+        private void WriteValueToStream(string value, Stream stream)
+        {
+            var tmpBuf = Encoding.ASCII.GetBytes(value);
+            stream.Write(tmpBuf, 0, tmpBuf.Length);
+        }
+
+        #endregion
 
         #endregion
 

@@ -22,6 +22,7 @@ using RedundancyLibrary.Domain;
 using RedundancyLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RedundancyLibrary.Kernels
 {
@@ -81,9 +82,12 @@ namespace RedundancyLibrary.Kernels
 
         #region UploadFile
 
-        public bool UploadFile(int rootDirectoryId)
+        public bool UploadFile(int rootDirectoryId, FileInfo file)
         {
-            return SendRequest<bool>(METHOD_UPLOADFILE, rootDirectoryId.ToString(), GetTokenString());
+            if (!file.Exists)
+                throw new FileNotFoundException();
+
+            return SendFileRequest<bool>(METHOD_UPLOADFILE, file, rootDirectoryId.ToString(), GetTokenString());
         }
 
         #endregion
