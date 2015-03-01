@@ -95,6 +95,13 @@ namespace RedundancyLibrary.Core
 
         #region methods
 
+        public void SendRequestWithRawResult(ApiModule module, string method, IEnumerable<string> arguments, Stream outputStream)
+        {
+            var statusCode = SendRequest(module, method, arguments, outputStream);
+            if (statusCode != HttpStatusCode.OK)
+                HandleError(outputStream);
+        }
+
         public T SendRequest<T>(ApiModule module, string method, IEnumerable<string> arguments)
         {
             using (var responseStream = new MemoryStream())
@@ -273,7 +280,7 @@ namespace RedundancyLibrary.Core
 
             var serializer = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings
             {
-                DateTimeFormat = new DateTimeFormat("dd. MMM yyyy - HH:mm")
+                DateTimeFormat = new DateTimeFormat("d. MMM yyyy - HH:mm", CultureInfo.GetCultureInfo("en-US"))
             });
             return (T)serializer.ReadObject(inputStream);
         }

@@ -23,6 +23,7 @@ using RedundancyLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace RedundancyLibrary.Kernels
 {
@@ -40,8 +41,22 @@ namespace RedundancyLibrary.Kernels
 
         private const string METHOD_UPLOADFILE = "UploadFile";
         private const string METHOD_DELETEFILE = "DeleteFile";
+        private const string METHOD_GETCONTENTOFFILE = "GetContentOfFile";
 
         private const string METHOD_GETABSOLUTEPATHBYID = "GetAbsolutePathById";
+
+        private const string METHOD_MOVEENTRYBYID = "MoveEntryById";
+        private const string METHOD_MOVEENTRY = "MoveEntry";
+        private const string METHOD_COPYENTRYBYID = "CopyEntryById";
+        private const string METHOD_COPYENTRY = "CopyEntry";
+        private const string METHOD_GETENTRYBYABSOLUTEPATH = "GetEntryByAbsolutePath";
+        private const string METHOD_RENAMEENTRY = "RenameEntry";
+        private const string METHOD_ISENTRYEXISTING = "IsEntryExisting";
+        private const string METHOD_GETENTRYBYID = "GetEntryById";
+
+        private const string METHOD_STARTZIPCREATION = "StartZipCreation";
+        private const string METHOD_GETLASTCHANGEDOFFILESYSTEM = "GetLastChangesOfFileSystem";
+
 
         #endregion
 
@@ -69,6 +84,17 @@ namespace RedundancyLibrary.Kernels
         public IEnumerable<FileSystemItem> GetDirectoryContent()
         {
             return GetDirectoryContent("/"); // "/" -> root path
+        }
+
+        /// <summary>
+        /// Gets the content of the given directory
+        /// </summary>
+        /// <param name="dirId">Directory-ID</param>
+        /// <returns></returns>
+        public IEnumerable<FileSystemItem> GetDirectoryContent(int dirId)
+        {
+            var path = GetAbsolutePath(dirId);
+            return GetDirectoryContent(path);
         }
 
         /// <summary>
@@ -135,6 +161,91 @@ namespace RedundancyLibrary.Kernels
         }
 
         #endregion
+
+        public Stream GetFileContent(int fileId)
+        {
+            var entry = GetEntry(fileId);
+            if (entry == null)
+                throw new FileNotFoundException(String.Format("File with ID \"{0}\" not found.", fileId));
+
+            if (entry.MimeType == "innode/directory")
+                throw new NotSupportedException("Entry isn't file.");
+
+            var ms = new MemoryStream();
+            SendRequestWithRawResult(METHOD_GETCONTENTOFFILE, ms, entry.Hash, GetTokenString());
+            ms.Position = 0;
+            return ms;
+        }
+
+        #endregion
+
+        #region entries
+
+        public bool MoveEntryById(int sourceId, int targetId)
+        {
+            var path = GetAbsolutePath(targetId);
+            return MoveEntryById(sourceId, path);
+        }
+
+        public bool MoveEntryById(int sourceId, string targetPath)
+        {
+            return SendRequest<bool>(METHOD_MOVEENTRYBYID, sourceId.ToString(), targetPath, GetTokenString());
+        }
+
+        public bool MoveEntry(string sourcePath, string targetPath)
+        {
+            return SendRequest<bool>(METHOD_MOVEENTRY, sourcePath, targetPath, GetTokenString());
+        }
+
+        public bool CopyEntryById(int sourceId, int targetId)
+        {
+            var path = GetAbsolutePath(targetId);
+            return CopyEntryById(sourceId, path);
+        }
+
+        public bool CopyEntryById(int sourceId, string targetPath)
+        {
+            return SendRequest<bool>(METHOD_COPYENTRYBYID, sourceId.ToString(), targetPath, GetTokenString());
+        }
+
+        public bool CopyEntry(string sourcePath, string targetPath)
+        {
+            return SendRequest<bool>(METHOD_COPYENTRY, sourcePath, targetPath, GetTokenString());
+        }
+
+        public FileSystemItem GetEntry(string absolutePath)
+        {
+            return SendRequest<FileSystemItem>(METHOD_GETENTRYBYABSOLUTEPATH, absolutePath, GetTokenString());
+        }
+
+        public FileSystemItem GetEntry(int id)
+        {
+            return SendRequest<FileSystemItem>(METHOD_GETENTRYBYID, id.ToString(), GetTokenString());
+        }
+
+        public bool RenameEntry(int id, string newName)
+        {
+            return SendRequest<bool>(METHOD_RENAMEENTRY, id.ToString(), newName, GetTokenString());
+        }
+
+        public bool ExistsEntry(string name, int rootDirId)
+        {
+            return SendRequest<bool>(METHOD_ISENTRYEXISTING, name, rootDirId.ToString(), GetTokenString());
+        }
+
+        #endregion
+
+        #region filesystem
+        
+        public string CreateZip(int entryToZip, int rootFolderId)
+        {
+            return SendRequest<string>(METHOD_STARTZIPCREATION, entryToZip.ToString(), GetTokenString(), rootFolderId.ToString());
+        } 
+
+        public IEnumerable<FileSystemChangeInfo> GetLastChanges()
+        {
+            return SendRequest<IEnumerable<FileSystemChangeInfo>>(METHOD_GETLASTCHANGEDOFFILESYSTEM, GetTokenString());
+        }
 
         #endregion
 

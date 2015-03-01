@@ -56,6 +56,18 @@ namespace RedundancyLibrary.Core
 
         #region override: Kernel
 
+        protected override T SendFileRequest<T>(string method, System.IO.FileInfo file, params string[] args)
+        {
+            CheckAuthorization();
+            return base.SendFileRequest<T>(method, file, args);
+        }
+
+        protected override void SendRequestWithRawResult(string method, System.IO.Stream result, params string[] args)
+        {
+            CheckAuthorization();
+            base.SendRequestWithRawResult(method, result, args);
+        }
+
         protected override T SendRequest<T>(string method, params string[] args)
         {
             CheckAuthorization();

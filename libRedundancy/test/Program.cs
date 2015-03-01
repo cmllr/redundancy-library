@@ -11,16 +11,12 @@ namespace RedundancyLibrary.Test
         {
             string userName = "ApiTest";
             string password = "apitest";
-            string target = "http://localhost/Includes/api.inc.php";
+            string target = "http://localhost/rdcy/Includes/api.inc.php";
 
             var authOk = Authentification.Authorize(userName, password, target);
 
             var fileKernel = new FileSystemKernel(target);
-            var filesBefore = fileKernel.GetFolderList();
-
-
-            var filesAfter = fileKernel.GetDirectoryContent();
-
+            var filesBefore = fileKernel.GetLastChanges();
 
             Console.ReadLine();
 

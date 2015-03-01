@@ -58,6 +58,11 @@ namespace RedundancyLibrary.Core
 
         #region methods
 
+        protected virtual void SendRequestWithRawResult(string method, Stream result, params string[] args)
+        {
+            RestfulAccessService.SendRequestWithRawResult(_module, method, args, result);
+        }
+
         protected virtual T SendRequest<T>(string method, params string[] args)
         {
             return RestfulAccessService.SendRequest<T>(_module, method, args);

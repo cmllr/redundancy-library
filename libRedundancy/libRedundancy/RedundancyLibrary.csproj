@@ -55,6 +55,7 @@
     <Compile Include="Domain\Token.cs" />
     <Compile Include="Kernels\FileSystemKernel.cs" />
     <Compile Include="Kernels\UserKernel.cs" />
+    <Compile Include="Models\FileSystemChangeInfo.cs" />
     <Compile Include="Models\FileSystemItem.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="Models\Role.cs" />
