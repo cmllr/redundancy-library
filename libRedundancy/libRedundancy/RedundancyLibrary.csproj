@@ -53,6 +53,7 @@
     <Compile Include="Domain\ApiModule.cs" />
     <Compile Include="Domain\Attributes\ApiModuleTypeAttribute.cs" />
     <Compile Include="Domain\Token.cs" />
+    <Compile Include="Domain\UserCreationInfo.cs" />
     <Compile Include="Kernels\FileSystemKernel.cs" />
     <Compile Include="Kernels\UserKernel.cs" />
     <Compile Include="Models\FileSystemChangeInfo.cs" />

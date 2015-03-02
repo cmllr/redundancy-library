@@ -20,15 +20,17 @@
 
 using RedundancyLibrary.Core;
 using RedundancyLibrary.Domain;
+using RedundancyLibrary.Models;
 using System;
 
 namespace RedundancyLibrary.Kernels
 {
-    internal sealed class UserKernel : Kernel
+    public sealed class UserKernel : Kernel
     {
         #region constants
 
         private const string METHOD_LOGIN = "LogIn";
+        private const string METHOD_REGISTERUSER = "RegisterUser";
 
         #endregion
 
@@ -43,10 +45,15 @@ namespace RedundancyLibrary.Kernels
 
         #region methods
 
-        public string Login(string username, string password, bool stayLoggedIn = true)
+        internal string Login(string username, string password, bool stayLoggedIn = true)
         {
             var args = new string[] { username, password, stayLoggedIn.ToString() };
             return SendRequest<string>(METHOD_LOGIN, args);
+        }
+
+        public User CreateNewUser(UserCreationInfo creationInfo)
+        {
+            return SendRequest<User>(METHOD_REGISTERUSER, creationInfo.LoginName, creationInfo.DisplayName, creationInfo.EmailAddress, creationInfo.Password);
         }
 
         #endregion

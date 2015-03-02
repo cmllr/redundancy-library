@@ -1,7 +1,9 @@
 ﻿
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RedundancyLibrary.Core;
 using RedundancyLibrary.Kernels;
 using System;
+using System.IO;
 
 namespace RedundancyLibrary.Test
 {
@@ -16,7 +18,22 @@ namespace RedundancyLibrary.Test
             var authOk = Authentification.Authorize(userName, password, target);
 
             var fileKernel = new FileSystemKernel(target);
-            var filesBefore = fileKernel.GetLastChanges();
+            Assert.IsNotNull(fileKernel);
+
+            var entry = fileKernel.GetEntry("/Test/");
+            if (entry == null)
+            {
+                fileKernel.CreateDirectory("Test", -1);
+                entry = fileKernel.GetEntry("/Test/");
+                Assert.IsNotNull(entry);
+                Assert.AreEqual<int>(-1, entry.ParentID);
+            }
+
+            var fi = new FileInfo(@"C:\Users\lwelker\Downloads\npp.6.7.4.Installer.exe");
+            var result = fileKernel.UploadFile(entry.Id, fi);
+            Assert.IsTrue(result);
+
+
 
             Console.ReadLine();
 

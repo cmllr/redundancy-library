@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RedundancyLibrary.Domain
+{
+    public sealed class UserCreationInfo
+    {
+        #region properties
+
+        public string LoginName { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public string EmailAddress { get; set; }
+
+        public string Password { get; set; }
+
+        #endregion
+    }
+}
