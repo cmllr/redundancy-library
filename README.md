@@ -21,42 +21,34 @@ See http://redundancy.pfweb.eu/doc/1.9.15/index.html for more details
 Sample
 ======
 
-You can find the console application **Test** in the project folder.
-
-```C 
+Authentification:
+```C
 string userName = "username";
 string password = "password";
 string target = "http://server//Includes/api.inc.php";
 
-//Initalize the api
-libRedundancy.libRedundancy lib = new libRedundancy.libRedundancy(new Uri(target)); 
+// this method authorizes the given user and returns true or false
+var authOk = Authentification.Authorize(userName, password, target);
+```
 
-//Get the Version
-string version = lib.Request<string>("Kernel", "GetVersion", new string[0]);
+The access to the Redundancy-Server will be done with diffrent kernel classes.
+At the moment there is only the "FileSystemKernel" implemented. Other ones following in next versions.
 
-//Authentification sample. You will get the session token
-string token = lib.Request<String>("Kernel.UserKernel", "LogIn", new string[] { userName, password, "true" });
+Example for accessing the Redundancy-FileSystem:
+```C
+var fileSystemKernel = new FileSystemKernel(target);
 
-//Get the user JSON data
-User userObject = lib.Request<User>("Kernel.UserKernel", "GetUser", new string[] { token });
+// creating new dir in root direcotry
+fileSystemKernel.CreateDirectory(-1, "Dir-Name");
 
-//Get the file entries of your root folder
-List<FileSystemItem> entries =  lib.Request<List<FileSystemItem>>("Kernel.FileSystemKernel", "GetContent", new string[] {"/", token });
+// move any entry (file or direcotry)
+var result = fileSystemKernel.MoveEntryById(1, 2);
 
-//Create a new folder
-bool newDir = lib.Request<bool>("Kernel.FileSystemKernel", "CreateDirectory", new string[] { "FileUploads", "-1", token });
-
-//Rename it (get the ID, then rename)
-FileSystemItem newFolder = lib.Request<FileSystemItem>("Kernel.FileSystemKernel", "GetEntryByAbsolutePath", new string[] { "/FileUploads/", token });
-
-//Do the renaming itself
-bool rename = lib.Request<bool>("Kernel.FileSystemKernel", "RenameEntry", new string[] { newFolder.ID.ToString(), "renamedFolder", token });
-
-//Get the properties of the now renamed folder
-FileSystemItem renamedFolder = lib.Request<FileSystemItem>("Kernel.FileSystemKernel", "GetEntryByAbsolutePath", new string[] { "/renamedFolder/", token });
-
-//Upload a file to the renamed folder
-bool upload = lib.UploadFile(renamedFolder.ID, token, "C:\\Users\\rdcy\\sample.doc");
+// Upload file
+using (var fileInfo = new FileInfo(@"DataPath"))
+{
+  var result = fileSystemKernel.UploadFile(-1, fileInfo);
+}
 ```
 
 License
