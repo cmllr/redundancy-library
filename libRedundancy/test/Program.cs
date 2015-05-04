@@ -1,9 +1,6 @@
-﻿
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RedundancyLibrary.Core;
+﻿using RedundancyLibrary.Core;
 using RedundancyLibrary.Kernels;
 using System;
-using System.IO;
 
 namespace RedundancyLibrary.Test
 {
@@ -11,29 +8,18 @@ namespace RedundancyLibrary.Test
     {
         static void Main(string[] args)
         {
-            string userName = "ApiTest";
+            string userName = "l.welker";
             string password = "apitest";
-            string target = "http://localhost/rdcy/Includes/api.inc.php";
+            string target = "http://localhost:5555/Includes/api.inc.php";
 
             var authOk = Authentification.Authorize(userName, password, target);
 
             var fileKernel = new FileSystemKernel(target);
-            Assert.IsNotNull(fileKernel);
 
-            var entry = fileKernel.GetEntry("/Test/");
-            if (entry == null)
-            {
-                fileKernel.CreateDirectory("Test", -1);
-                entry = fileKernel.GetEntry("/Test/");
-                Assert.IsNotNull(entry);
-                Assert.AreEqual<int>(-1, entry.ParentID);
-            }
+            var content = fileKernel.GetDirectoryContent();
 
-            var fi = new FileInfo(@"C:\Users\lwelker\Downloads\npp.6.7.4.Installer.exe");
-            var result = fileKernel.UploadFile(entry.Id, fi);
-            Assert.IsTrue(result);
-
-
+            fileKernel.CreateDirectory("Test", -1);
+            fileKernel.RenameEntry(1, "Test111");
 
             Console.ReadLine();
 
