@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -143,7 +142,8 @@ namespace RedundancyLibrary.Core
             {
                 {"module", module.GetModuleType()},
                 {"method", method},
-                {"args", GetJsonStringFromArgument(arguments)}
+                {"args", GetJsonStringFromArgument(arguments)},
+                {"rawDate", "true"}
             };
 
             var boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x", NumberFormatInfo.InvariantInfo);
@@ -176,7 +176,8 @@ namespace RedundancyLibrary.Core
             {
                 {"module", module.GetModuleType()},
                 {"method", method},
-                {"args", GetJsonStringFromArgument(arguments)}
+                {"args", GetJsonStringFromArgument(arguments)},
+                {"rawDate", "true"}
             };
 
             var boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x", NumberFormatInfo.InvariantInfo);
@@ -250,7 +251,7 @@ namespace RedundancyLibrary.Core
             }
         }
 
-        private string GetStringForRequest(IReadOnlyDictionary<string, string> arguments)
+        private string GetStringForRequest(Dictionary<string, string> arguments)
         {
             var first = true;
             var sb = new StringBuilder();
@@ -278,10 +279,12 @@ namespace RedundancyLibrary.Core
             if (typeof(Stream).IsAssignableFrom(typeof(T)))
                 return (T)((object)inputStream); // cast first to object, because you can't cast inputStream directly to (T)
 
-            var serializer = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings
-            {
-                DateTimeFormat = new DateTimeFormat("d. MMM yyyy - HH:mm", CultureInfo.GetCultureInfo("en-US"))
-            });
+            //var serializer = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings
+            //{
+            //    DateTimeFormat = new DateTimeFormat("d. MMM yyyy - HH:mm", CultureInfo.GetCultureInfo("en-US"))
+            //});
+
+            var serializer = new DataContractJsonSerializer(typeof(T));
             return (T)serializer.ReadObject(inputStream);
         }
 
