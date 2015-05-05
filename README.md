@@ -7,11 +7,8 @@ Core client library to communicate with Redundancy servers.
 
 Requirements
 ============
-* [JSON.NET]
-* .NET Framework 4+
+* .NET Framework 4
 * Redundancy server version 1.9.15+
-
-[JSON.NET]:http://james.newtonking.com/json
 
 Further documentation
 =====================
