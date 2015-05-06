@@ -23,7 +23,6 @@ using RedundancyLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace RedundancyLibrary.Kernels
 {
@@ -112,9 +111,9 @@ namespace RedundancyLibrary.Kernels
 
         #region CreateDirectory
 
-        public void CreateDirectory(string name, int rootDirectoryId)
+        public bool CreateDirectory(string name, int rootDirectoryId)
         {
-            SendRequest(METHOD_CREATEDIRECTORY, name, rootDirectoryId.ToString(), GetTokenString());
+            return SendRequest<bool>(METHOD_CREATEDIRECTORY, name, rootDirectoryId.ToString(), GetTokenString());
         }
 
         #endregion
@@ -236,11 +235,11 @@ namespace RedundancyLibrary.Kernels
         #endregion
 
         #region filesystem
-        
+
         public string CreateZip(int entryToZip, int rootFolderId)
         {
             return SendRequest<string>(METHOD_STARTZIPCREATION, entryToZip.ToString(), GetTokenString(), rootFolderId.ToString());
-        } 
+        }
 
         public IEnumerable<FileSystemChangeInfo> GetLastChanges()
         {

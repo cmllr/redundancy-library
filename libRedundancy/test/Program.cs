@@ -18,7 +18,7 @@ namespace RedundancyLibrary.Test
 
             var content = fileKernel.GetDirectoryContent();
 
-            fileKernel.CreateDirectory("Test", -1);
+            var result = fileKernel.CreateDirectory("Test1", -1);
             fileKernel.RenameEntry(1, "Test111");
 
             Console.ReadLine();
